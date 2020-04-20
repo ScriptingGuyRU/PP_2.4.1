@@ -26,7 +26,7 @@
 </head>
 <body>
 
-<p> Text Something from Car controller</p>
+<p> ${localeCar}</p>
 
 <table>
     <tr>
@@ -44,8 +44,11 @@
     </c:forEach>
 </table>
 
-<form action="/car" method="get">
-    <button type="submit">Reroll</button>
+<form method="post" action="/car?locale=en" >
+    <button type="submit">Reroll (locale en)</button>
+</form>
+<form method="post" action="/car?locale=ru" >
+    <button type="submit">Goto Car (locale ru)</button>
 </form>
 
 <%--<img src="https://i.pinimg.com/originals/87/af/ef/87afef76100d0b704ca5b6039468a736.jpg" width="450px" height="450px">--%>
