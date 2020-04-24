@@ -1,8 +1,11 @@
+web\service\UserService.class
 web\controller\HelloController.class
-web\dao\CarDao.class
+web\model\Sex.class
 web\config\AppInit.class
-web\model\Car.class
-web\service\CarService.class
+web\config\DBConfig.class
 web\config\WebConfig.class
-web\dao\CarDaoImpl.class
-web\service\CarServiceImpl.class
+web\dao\UserDao.class
+web\service\UserServiceImpl.class
+web\dao\UserDaoImpl.class
+web\model\Role.class
+web\model\User.class

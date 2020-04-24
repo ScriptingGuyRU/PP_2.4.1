@@ -1,20 +1,16 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import web.config.WebConfig;
-import web.model.Car;
-import web.service.CarService;
-import web.service.CarServiceImpl;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import web.model.Role;
+import web.model.Sex;
+import web.model.User;
+import web.service.UserService;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -22,34 +18,33 @@ import java.util.List;
 public class HelloController {
 
 	@Autowired
-	private CarService carService;
+	private UserService userService;
 
-	@RequestMapping(value = "hello", method = RequestMethod.GET)
-	public String printWelcome(ModelMap model) {
-		List<String> messages = new ArrayList<>();
-		messages.add("Hello!");
-		messages.add("I'm Spring MVC application");
-		messages.add("5.2.0 version by sep'19 ");
-		model.addAttribute("messages", messages);
-		return "hello"; //Тут имя jsp
+
+	@GetMapping("login")
+	public String loginGet(ModelMap map) {
+		return "login";
 	}
 
-	@RequestMapping(value = "car", method = RequestMethod.POST)
-	public String newController(@RequestParam String locale, ModelMap modelMap) {
-    	modelMap.addAttribute("localeCar",setLocale(locale));
-        List<Car> cars = carService.getSomeCars();
-        modelMap.addAttribute("cars",cars);
-        return "car";
-	}
-
-	public String setLocale(String locale) {
-		if (locale.equals("en")) {
-			return "CARS";
-		} else if (locale.equals("ru")) {
-			return "МАШИНЫ";
-		} else {
-			return "EXCEPTION, uncorrect location value";
+	@PostMapping("login")
+	public ModelAndView loginPost(HttpSession session,
+			@RequestParam String login, String password) {
+		ModelAndView mv = new ModelAndView();
+		User user = userService.getUserByNameAndPassword(login, password);
+		session.setAttribute("user",user);
+		if (user.getRole().equals(Role.ADMIN)){
+			mv.setViewName("redirect:/admin");
+			System.out.println(mv.getViewName());
+			return mv;
 		}
+		mv.setViewName("redirect:/user");
+		return mv;
 	}
-	
+
+	@PostMapping("logout")
+	public String logout(HttpSession session){
+		session.invalidate();
+		return "redirect:/login";
+	}
+
 }
