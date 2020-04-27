@@ -11,8 +11,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
-@EnableWebMvc // Включаем MVC
-@ComponentScan("web") // Указываем где искать контроллеры и остальные компоненты
+@EnableWebMvc
+@ComponentScan("web")
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -23,8 +23,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public InternalResourceViewResolver setupViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/pages/");         // указываем где будут лежать наши веб-страницы
-        resolver.setSuffix(".jsp");        // формат View который мы будем использовать
+        resolver.setPrefix("/WEB-INF/pages/");
+        resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
 
         return resolver;

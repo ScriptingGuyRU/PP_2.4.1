@@ -81,5 +81,7 @@
 <form action="/admin/add" method="get">
     <button type="submit">New User</button>
 </form>
+<jsp:include page="../logout.jsp" />
+Status: <%= session.getAttribute("status") %>
 </body>
 </html>

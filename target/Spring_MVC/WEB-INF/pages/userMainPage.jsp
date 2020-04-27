@@ -17,9 +17,6 @@
     <script src="https://apps.elfsight.com/p/platform.js" defer></script>
     <div class="elfsight-app-ac156760-2281-4766-bd4f-d8f93f7ef965"></div>
 
-    <form action="/logout" method="post">
-        <a href="/logout"></a>
-        <button type="submit">LogOut</button>
-    </form>
+<jsp:include page="logout.jsp" />
 </body>
 </html>

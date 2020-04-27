@@ -16,7 +16,7 @@
     <p>ID пользователя:</P>
     ID :<input type="text" name="id" value="<%= request.getParameter("id")%>" readonly>
     <p>Новое имя:</P>
-    Name :<input type="text" name="name" value="<%= request.getParameter("name")%>" >
+    Name :<input type="text" name="name" value="<%= request.getParameter("name")%>" required>
     <p>Новый пароль:</P>
     Password :<input type="text" name="password" value="<%= request.getParameter("password")%>" required>
     <p>Пол:</p>
@@ -26,14 +26,13 @@
         <option selected value="FEMALE">Женский</option>
     </select>
 
-    <select name="role">
-        <option disabled>Role :</option>
-        <option selected value="ADMIN">Admin</option>
-        <option selected value="USER">User</option>
-    </select>
+    <p/>
+    <input type="checkbox" name="user" value="user">USER<Br>
+    <input type="checkbox" name="admin" value="admin">ADMIN<Br>
     <div class="w3-container">
         <p><button class="w3-button w3-cyan" type="submit">Edit</button></p>
     </div>
 </form>
+<jsp:include page="../logout.jsp" />
 </body>
 </html>

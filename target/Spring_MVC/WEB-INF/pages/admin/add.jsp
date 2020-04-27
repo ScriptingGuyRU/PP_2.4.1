@@ -22,13 +22,11 @@
             <option selected value="MALE">Мужской</option>
             <option selected value="FEMALE">Женский</option>
         </select>
-
-        <select name="role">
-            <option disabled>Role :</option>
-            <option selected value="ADMIN">Admin</option>
-            <option selected value="USER">User</option>
-        </select>
+        <p/>
+        <input type="checkbox" name="user" value="user">USER<Br>
+        <input type="checkbox" name="admin" value="admin">ADMIN<Br>
         <button type="submit">Add</button>
     </form>
+    <jsp:include page="../logout.jsp" />
 </body>
 </html>

@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserDao {
     List<User> getAllUsers();
 
-    void addUser(User user);
+    boolean addUser(User user);
 
     void delete(User user);
 
@@ -16,5 +16,9 @@ public interface UserDao {
     User getUserById(Long id);
 
     User getUserByNameAndPassword(String name, String password);
+
+    User getUserByName(String s);
+
+    boolean validator(User user);
 }
 

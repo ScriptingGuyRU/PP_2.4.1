@@ -1,19 +1,17 @@
 package web.controller;
 
-import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import web.model.Role;
-import web.model.Sex;
 import web.model.User;
 import web.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -35,24 +33,28 @@ public class AdminController {
     }
 
     @PostMapping("edit")
-    public ModelAndView editPost(
-            @RequestParam(value = "id") Long id,
-            @RequestParam(value = "name") String name,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "sex") Sex sex,
-            @RequestParam(value = "role") Role role) {
+    public String editPost(@ModelAttribute("user") User user,
+                           HttpServletRequest request,
+                           HttpSession session) {
 
-        ModelAndView mv = new ModelAndView();
+        Set<Role> roles = user.getRole();
+        String isAdmin = request.getParameter("admin");
+        String isUser = request.getParameter("user");
 
-        if (id < 0 || id == null || name == null || password == null || sex == null || role == null) {
-            mv.setStatus(HttpStatus.BAD_REQUEST);
-            mv.setViewName("redirect:/admin");
-            return mv;
+        if (isAdmin != null) {
+            roles.add(Role.ADMIN);
+        }
+        if (isUser != null) {
+            roles.add(Role.USER);
+        }
+        if (roles.size() == 0) {
+            session.setAttribute("status","Не выбрана роль");
+            return "redirect:/admin";
         }
 
-        userService.editUser(new User(id,name,password,sex,Role.ADMIN));
-        mv.setViewName("redirect:/admin");
-        return mv;
+        user.setRole(roles);
+        userService.editUser(user);
+        return "redirect:/admin";
     }
 
     @GetMapping("delete")
@@ -73,14 +75,31 @@ public class AdminController {
     }
 
     @PostMapping("add")
-    public ModelAndView addPost(
-            @RequestParam(value = "name") String name,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "sex") Sex sex,
-            @RequestParam(value = "role") Role role) {
-        ModelAndView mv = new ModelAndView();
-        userService.addUser(new User(name,password,sex,role));
-        mv.setViewName("redirect:/admin");
-        return mv;
+    public String addPost(@ModelAttribute("user") User user,
+                          HttpServletRequest request,
+                          HttpSession session) throws Exception {
+
+        Set<Role> roles = user.getRole();
+        String isAdmin = request.getParameter("admin");
+        String isUser = request.getParameter("user");
+
+        if (isAdmin != null) {
+            roles.add(Role.ADMIN);
+        }
+        if (isUser != null) {
+            roles.add(Role.USER);
+        }
+        if (roles.size() == 0) {
+            session.setAttribute("status","Не выбрана роль");
+            return "redirect:/admin";
+        }
+
+        user.setRole(roles);
+        if (userService.addUser(user)){
+            return "redirect:/admin";
+        } else {
+            session.setAttribute("status","Такое имя уже есть");
+            return "redirect:/admin";
+        }
     }
 }

@@ -18,5 +18,6 @@
         <p><button class="w3-button w3-cyan" type="submit">Delete</button></p>
     </div>
 </form>
+<jsp:include page="../logout.jsp" />
 </body>
 </html>
