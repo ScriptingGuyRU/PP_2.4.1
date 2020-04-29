@@ -6,6 +6,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
+import web.service.RoleService;
 import web.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     @GetMapping("")
     public String adminMainPage(ModelMap modelMap){
@@ -42,10 +46,10 @@ public class AdminController {
         String isUser = request.getParameter("user");
 
         if (isAdmin != null) {
-            roles.add(Role.ADMIN);
+            roles.add(roleService.getRole("ADMIN"));
         }
         if (isUser != null) {
-            roles.add(Role.USER);
+            roles.add(roleService.getRole("USER"));
         }
         if (roles.size() == 0) {
             session.setAttribute("status","Не выбрана роль");
@@ -64,8 +68,7 @@ public class AdminController {
 
     @PostMapping("delete")
     public String deletePost(@RequestParam("id") Long id) {
-        User user = userService.getUserById(id);
-        userService.delete(user);
+        userService.delete(id);
         return "redirect:/admin";
     }
 
@@ -84,10 +87,10 @@ public class AdminController {
         String isUser = request.getParameter("user");
 
         if (isAdmin != null) {
-            roles.add(Role.ADMIN);
+            roles.add(roleService.getRole("ADMIN"));
         }
         if (isUser != null) {
-            roles.add(Role.USER);
+            roles.add(roleService.getRole("USER"));
         }
         if (roles.size() == 0) {
             session.setAttribute("status","Не выбрана роль");

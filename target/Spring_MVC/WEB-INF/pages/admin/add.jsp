@@ -12,16 +12,14 @@
 </head>
 <body>
     <form action="/admin/add" method="post">
-        <p>Имя:</P>
         Name :<input type="text" name="name" required>
-        <p>Пароль:</P>
         Password :<input type="text" name="password" required>
-        <p>Пол:</p>
-        <select name="sex">
-            <option disabled>Пол :</option>
-            <option selected value="MALE">Мужской</option>
-            <option selected value="FEMALE">Женский</option>
-        </select>
+        <p>Пол: <select name="sex">
+                    <option disabled>Пол :</option>
+                    <option selected value="MALE">Мужской</option>
+                    <option selected value="FEMALE">Женский</option>
+                </select>
+        </p>
         <p/>
         <input type="checkbox" name="user" value="user">USER<Br>
         <input type="checkbox" name="admin" value="admin">ADMIN<Br>

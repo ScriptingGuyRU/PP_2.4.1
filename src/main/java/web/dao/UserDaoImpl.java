@@ -1,77 +1,65 @@
 package web.dao;
 
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import web.model.User;
 
-import javax.persistence.TypedQuery;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    @Autowired
-    private SessionFactory sessionFactory;
-
-
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Override
     @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
-        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
-        return query.getResultList();
+        return entityManager.createQuery("From User").getResultList();
     }
 
     @Override
     public boolean addUser(User user) {
-        if (validator(user)) {
-            sessionFactory.getCurrentSession().save(user);
-            return true;
-        } else {
-            return false;
-        }
+
+//            entityManager.persist(user);  // Я не смог победить persist. С ним не работает. PersistentObjectException.
+        //Из-за того, что я пытаюсь сохранить user с уже существующей ролью Role.
+        Session session = entityManager.unwrap(Session.class);
+        session.save(user);
+
+        return true;
     }
 
     @Override
-    public void delete(User user) {
-        sessionFactory.getCurrentSession().delete(user);
+    public void delete(Long id) {
+        User user = entityManager.find(User.class,id);
+        entityManager.remove(user);
     }
 
     @Override
     public void editUser(User user) {
-         sessionFactory.getCurrentSession().update(user);
+        entityManager.merge(user);
+
     }
 
     @Override
     public User getUserById(Long id) {
-        return sessionFactory.getCurrentSession().get(User.class, id);
+        User user = entityManager.find(User.class,id);
+
+        return user;
     }
 
-    @Override
-    public User getUserByNameAndPassword(String name, String password) {
-        String hql = "From User where name = :name and password = :password";
-        return (User) sessionFactory.getCurrentSession().createQuery(hql)
-                .setParameter("name",name)
-                .setParameter("password",password)
-                .uniqueResult();
-
-    }
 
     @Override
     public User getUserByName(String name) {
-        String hql = "select u From User u where u.name = :name";
-        return (User) sessionFactory.getCurrentSession().createQuery(hql)
-                .setParameter("name",name)
-                .uniqueResult();
+        User user = (User) entityManager
+                .createQuery("select u from User u where name = :name")
+                .setParameter("name",name).getSingleResult();
+
+       return user;
+
     }
 
-    @Override
-    public boolean validator(User user) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("FROM User WHERE name=:name")
-                .setParameter("name", user.getName())
-                .list().size() == 0;
-    }
 }

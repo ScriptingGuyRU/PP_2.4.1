@@ -1,6 +1,5 @@
 package web.model;
 
-import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,8 +13,8 @@ import java.util.Set;
 public class User implements UserDetails {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "name",unique = true)
@@ -25,37 +24,30 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "sex")
-    private Sex sex;
+    private String sex;
 
-    @ElementCollection(targetClass=Role.class, fetch=FetchType.EAGER)
-    @CollectionTable(name="user_role", joinColumns=@JoinColumn(name="user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> role = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String name, String password, Sex sex, Set<Role> role) {
+    public User(String name, String password, String sex, Set<Role> role) {
         this.name = name;
         this.password = password;
         this.sex = sex;
-        this.role = role;
+        this.roles = role;
     }
 
-    public User(String name, String password, Sex sex) {
-        this.name = name;
-        this.password = password;
-        this.sex = sex;
-    }
-
-    public User(Long id, String name, String password, Sex sex) {
-        this.id = id;
+    public User(String name, String password, String sex) {
         this.name = name;
         this.password = password;
         this.sex = sex;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -109,20 +101,20 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Sex getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(Sex sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
     public Set<Role>    getRole() {
-        return role;
+        return roles;
     }
 
     public void setRole(Set<Role> role) {
-        this.role = role;
+        this.roles = role;
     }
 
 
@@ -132,7 +124,7 @@ public class User implements UserDetails {
                 "\nid = " + id +
                 "\nname = '" + name + '\'' +
                 "\npassword = '" + password + '\'' +
-                "\nsex = " + sex + "\nrole = " + role;
+                "\nsex = " + sex + "\nrole = " + roles.toArray().toString() + "\n" + roles;
     }
 
 

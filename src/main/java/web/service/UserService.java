@@ -9,11 +9,9 @@ public interface UserService {
 
     boolean addUser(User user);
 
-    void delete(User user);
+    void delete(Long id);
 
     void editUser(User user);
 
     User getUserById(Long id);
-
-    User getUserByNameAndPassword(String name, String password);
 }

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/")
-public class HelloController {
+public class LoginController {
 
 	@Autowired
 	private UserService userService;

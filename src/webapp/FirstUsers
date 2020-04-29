@@ -1,0 +1,11 @@
+        User user2 = new User("1",passwordEncoder.encode("1"),"MALE");
+        Set<Role> set2 = user2.getRole();
+        set2.add(new Role("ADMIN"));
+        user2.setRole(set2);
+        userDao.addUser(user2);
+
+        User user3 = new User("3",passwordEncoder.encode("1"),"FEMALE");
+        Set<Role> set3 = user3.getRole();
+        set3.add(new Role("USER"));
+        user3.setRole(set3);
+        userDao.addUser(user3);

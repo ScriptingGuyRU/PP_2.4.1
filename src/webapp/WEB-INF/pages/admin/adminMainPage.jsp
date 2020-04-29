@@ -47,7 +47,7 @@
             <td>${userList.name}</td>
             <td>${userList.password}</td>
             <td>${userList.sex}</td>
-            <td>${userList.role}</td>
+            <td>${userList.getRole().toString()}</td>
             <td>
                 <form method="get" action="/admin/edit">
                     <div>
